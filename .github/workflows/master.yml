@@ -1,0 +1,29 @@
+name: Deploy by Anurag Nayak
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Remote Apache Deployment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to VM via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          script: |
+            echo "Starting deployment - Anurag Nayak"
+            cd /var/www/html
+            sudo rm -rf *
+            sudo cp -r ~/your-repo/* /var/www/html/
+            sudo systemctl restart apache2
+            echo "Deployment completed - Anurag Nayak"
